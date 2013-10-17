@@ -1,4 +1,5 @@
 ngm-debug.log
-.idea/*
+.idea
 .DS_Store
 node_modules
+docs

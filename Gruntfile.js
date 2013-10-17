@@ -1,22 +1,31 @@
 module.exports = function(grunt) {
 
-    // Project configuration.
     grunt.initConfig({
-
         pkg: grunt.file.readJSON('package.json'),
-
         concat: {
             options: {
                 separator: ';'
             },
             dist: {
-                src: ['src/**/*.js'],
+                src: ['src/globals.js', 'src/utility.js', 'src/validateText.js', 'src/*.js'],
                 dest: 'dist/<%= pkg.name %>.js'
             }
         },
-
+        uglify: {
+            options: {
+                banner: '/*! <%= pkg.name %> developed by <%= pkg.author %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+            },
+            dist: {
+                files: {
+                    'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                }
+            }
+        },
+        qunit: {
+            files: ['test/**/*.html']
+        },
         jshint: {
-            files: ['src/*.js'],
+            files: ['src/**/*.js'],
             options: {
                 // options here to override JSHint defaults
                 globals: {
@@ -26,16 +35,24 @@ module.exports = function(grunt) {
                     document: true
                 }
             }
+        },
+        jsdoc : {
+            dist : {
+                src: ['src/**/*.js'],
+                options: {
+                    destination: 'docs/'
+                }
+            }
         }
-
     });
 
-
-    // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
-    // Default task(s).
-    grunt.registerTask('default', ['jshint', 'concat']);
 
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('makeDoc', ['jsdoc']);
 };
