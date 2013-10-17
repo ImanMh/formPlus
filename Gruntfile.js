@@ -36,13 +36,16 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jsdoc : {
+        jsdoc: {
             dist : {
-                src: ['src/**/*.js'],
+                src: ['src/*.js'],
                 options: {
                     destination: 'docs/'
                 }
             }
+        },
+        clean: {
+            files: ['docs/*']
         }
     });
 
@@ -50,9 +53,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-jsdoc');
 
 
     grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
-    grunt.registerTask('makeDoc', ['jsdoc']);
+    grunt.registerTask('makeDoc', ['clean', 'jsdoc']);
 };
